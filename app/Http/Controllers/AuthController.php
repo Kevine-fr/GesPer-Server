@@ -13,8 +13,13 @@ use App\Models\User;
 class AuthController extends Controller
 {
     public function GenerateCode(){
-        $code = random_int(100000, 999999);
-        return $code;
+        try {    
+            $code = random_int(100000, 999999);
+            
+            return $code;
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Une erreur est survenue lors de la génération du code. Veuillez réessayer !', 'errors' => $th->getMessage()], 500);
+        }
     }
     public function RegisterAdmin(Request $request){
         try {
