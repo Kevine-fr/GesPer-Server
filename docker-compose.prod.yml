@@ -26,7 +26,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile
     image: gesper-server:latest
-    container_name: gesper-server
+    container_name: gesper-api
     restart: unless-stopped
     depends_on:
       postgres:
