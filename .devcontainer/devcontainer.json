@@ -1,0 +1,41 @@
+{
+  "name": "GesPer Server — Java 21 Dev",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+
+  "forwardPorts": [8080, 5432, 8025],
+  "portsAttributes": {
+    "8080": { "label": "GesPer API", "onAutoForward": "notify" },
+    "5432": { "label": "PostgreSQL", "onAutoForward": "silent" },
+    "8025": { "label": "MailHog UI", "onAutoForward": "silent" }
+  },
+
+  "postCreateCommand": "mvn -B -ntp -q dependency:go-offline || true",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-boot-dev-pack",
+        "redhat.vscode-xml",
+        "redhat.vscode-yaml",
+        "esbenp.prettier-vscode",
+        "editorconfig.editorconfig",
+        "ms-azuretools.vscode-docker",
+        "humao.rest-client"
+      ],
+      "settings": {
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "java.compile.nullAnalysis.mode": "automatic",
+        "java.format.settings.profile": "GoogleStyle",
+        "files.eol": "\n",
+        "editor.formatOnSave": true,
+        "editor.rulers": [120]
+      }
+    }
+  },
+
+  "remoteUser": "vscode"
+}

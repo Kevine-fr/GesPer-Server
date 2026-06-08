@@ -1,0 +1,64 @@
+name: gesper-dev
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gesper-dev
+    volumes:
+      - ..:/workspace:cached
+      - gesper-m2:/home/vscode/.m2
+    working_dir: /workspace
+    command: sleep infinity
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_URL: jdbc:postgresql://postgres:5432/gesper
+      DB_USERNAME: gesper
+      DB_PASSWORD: gesper
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      JWT_SECRET: Y2hhbmdlLW1lLWluLXByb2R1Y3Rpb24tdGhpcy1pcy1hLXNlY3JldC1rZXktZm9yLWp3dC1hdC1sZWFzdC0yNTYtYml0cw==
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - gesper-dev-net
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: gesper-dev-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gesper
+      POSTGRES_USER: gesper
+      POSTGRES_PASSWORD: gesper
+    ports:
+      - "5432:5432"
+    volumes:
+      - gesper-dev-pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gesper -d gesper"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - gesper-dev-net
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: gesper-dev-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - gesper-dev-net
+
+volumes:
+  gesper-dev-pg-data:
+  gesper-m2:
+
+networks:
+  gesper-dev-net:
+    driver: bridge

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>GesPer — Confirmation d'inscription</title>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif; background:#f4f4f4; margin:0; padding:0;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <td align="center" style="padding: 24px 12px;">
+            <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0"
+                   style="background:#ffffff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); overflow:hidden;">
+                <tr>
+                    <td style="background:#059669; padding:24px; text-align:center; color:#ffffff;">
+                        <h1 style="margin:0; font-size:22px;">Bienvenue chez GesPer</h1>
+                        <p style="margin:8px 0 0 0; font-size:14px;">Confirmez votre adresse e-mail</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:24px; color:#333333; font-size:15px; line-height:1.5;">
+                        <p>Bonjour,</p>
+                        <p>Merci de vous inscrire sur <strong>GesPer</strong>. Voici votre code de vérification :</p>
+                        <div style="text-align:center; margin: 24px 0;">
+                            <span style="display:inline-block; padding:16px 32px;
+                                         background:#ecfdf5; color:#065f46; border-radius:8px;
+                                         font-size:32px; font-weight:bold; letter-spacing:6px;"
+                                  th:text="${code}">123456</span>
+                        </div>
+                        <p>Ce code est valable pendant <strong>10 minutes</strong>. Saisissez-le dans l'application pour valider votre inscription.</p>
+                        <p style="margin-top:24px; color:#6b7280; font-size:13px;">
+                            Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet e-mail.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background:#f3f4f6; padding:16px; text-align:center; color:#6b7280; font-size:12px;">
+                        © GesPer — Gestion financière personnelle
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

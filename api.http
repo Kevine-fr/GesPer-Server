@@ -1,0 +1,181 @@
+### GesPer Server — Requêtes prêtes à l'emploi
+### Compatible avec l'extension VS Code "REST Client" (humao.rest-client)
+
+@host = http://localhost:8080/api/v1
+@accessToken = REPLACE_AFTER_LOGIN
+@refreshToken = REPLACE_AFTER_LOGIN
+
+# ─── Public ──────────────────────────────────────────────────────
+
+### Hello
+GET {{host}}/
+
+### Health
+GET {{host}}/actuator/health
+
+### Swagger UI : ouvrir dans le navigateur
+# {{host}}/swagger-ui.html
+
+# ─── Inscription Client (flow complet) ───────────────────────────
+
+### 1. Envoyer le code de vérification au client
+POST {{host}}/auth/send-code/client
+Content-Type: application/json
+
+{
+  "email": "client@example.com",
+  "password": "monMotDePasseSecure123"
+}
+
+### 2. Inscrire le client avec le code reçu
+POST {{host}}/auth/register/client?code=123456
+Content-Type: application/json
+
+{
+  "name": "Jean Dupont",
+  "email": "client@example.com",
+  "password": "monMotDePasseSecure123"
+}
+
+# ─── Inscription Admin (flow complet) ────────────────────────────
+
+### Envoyer le code à l'admin global
+POST {{host}}/auth/send-code/admin
+Content-Type: application/json
+
+{
+  "email": "newadmin@example.com",
+  "password": "adminPassword123"
+}
+
+### Créer l'admin avec le code reçu sur l'email admin
+POST {{host}}/auth/register/admin?code=123456
+Content-Type: application/json
+
+{
+  "name": "Admin GesPer",
+  "email": "newadmin@example.com",
+  "password": "adminPassword123"
+}
+
+# ─── Login / Refresh / Logout ────────────────────────────────────
+
+### Login → récupérer accessToken et refreshToken
+# @name login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "client@example.com",
+  "password": "monMotDePasseSecure123"
+}
+
+### Refresh
+POST {{host}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Logout
+POST {{host}}/auth/logout
+Authorization: Bearer {{accessToken}}
+
+# ─── Login OAuth2 Google ─────────────────────────────────────────
+# Ouvrir dans le navigateur :
+# {{host}}/oauth2/authorize/google?redirect_uri=http://localhost:5173/oauth2/redirect
+
+# ─── Utilisateurs ────────────────────────────────────────────────
+
+### Mon profil
+GET {{host}}/users/me
+Authorization: Bearer {{accessToken}}
+
+### Mettre à jour mon profil
+PUT {{host}}/users/me
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Jean DUPONT"
+}
+
+### [ADMIN] Liste paginée des utilisateurs
+GET {{host}}/users/admin?page=0&size=20
+Authorization: Bearer {{accessToken}}
+
+# ─── Catégories ──────────────────────────────────────────────────
+
+### Lister les catégories
+GET {{host}}/categories?page=0&size=20
+Authorization: Bearer {{accessToken}}
+
+### [ADMIN] Créer une catégorie
+POST {{host}}/categories
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Loisirs",
+  "subtitle": "Cinéma, sport",
+  "isOrganized": false,
+  "isSpent": true
+}
+
+# ─── Gains (revenus) ─────────────────────────────────────────────
+
+### Mes gains
+GET {{host}}/gains/me?page=0&size=20
+Authorization: Bearer {{accessToken}}
+
+### Créer un gain
+POST {{host}}/gains
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "categorieId": 13,
+  "libelle": "Salaire de janvier",
+  "sum": 2500.50,
+  "isReccurent": true
+}
+
+### Modifier un gain
+PUT {{host}}/gains/me/1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "categorieId": 13,
+  "libelle": "Salaire de janvier (révisé)",
+  "sum": 2600.00,
+  "isReccurent": true
+}
+
+### Soft-delete d'un gain
+PATCH {{host}}/gains/me/1/soft-delete
+Authorization: Bearer {{accessToken}}
+
+# ─── Dépenses ────────────────────────────────────────────────────
+
+### Mes dépenses
+GET {{host}}/spents/me?page=0&size=20
+Authorization: Bearer {{accessToken}}
+
+### Créer une dépense
+POST {{host}}/spents
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "gainId": null,
+  "categorieId": 1,
+  "libelle": "Courses Carrefour",
+  "value": 85.30,
+  "isSpent": true
+}
+
+### Soft-delete d'une dépense
+PATCH {{host}}/spents/me/1/soft-delete
+Authorization: Bearer {{accessToken}}

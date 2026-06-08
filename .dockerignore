@@ -1,0 +1,14 @@
+target/
+.idea/
+.vscode/
+.devcontainer/
+*.iml
+**/*.log
+.git/
+.gitignore
+README.md
+.env
+.env.*
+!.env.example
+docker/
+HELP.md

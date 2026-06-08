@@ -1,0 +1,24 @@
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  mail:
+    properties:
+      mail:
+        smtp:
+          auth: false              # MailHog ne demande pas d'auth
+          starttls:
+            enable: false          # MailHog ne fait pas STARTTLS
+            required: false
+
+management:
+  health:
+    mail:
+      enabled: false               # désactive le healthcheck mail tant qu'on est en dev
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE

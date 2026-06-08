@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>GesPer — Demande de création admin</title>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif; background:#f4f4f4; margin:0; padding:0;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <tr>
+        <td align="center" style="padding: 24px 12px;">
+            <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0"
+                   style="background:#ffffff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); overflow:hidden;">
+                <tr>
+                    <td style="background:#1d4ed8; padding:24px; text-align:center; color:#ffffff;">
+                        <h1 style="margin:0; font-size:22px;">GesPer</h1>
+                        <p style="margin:8px 0 0 0; font-size:14px;">Nouvelle tentative de création d'un compte administrateur</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:24px; color:#333333; font-size:15px; line-height:1.5;">
+                        <p>Bonjour,</p>
+                        <p>Une demande de création d'un compte administrateur vient d'être effectuée. Voici les informations :</p>
+                        <table role="presentation" width="100%" cellspacing="0" cellpadding="8" border="0"
+                               style="background:#f9fafb; border-radius:6px; margin-top:12px;">
+                            <tr>
+                                <td style="font-weight:bold; width:40%;">Email :</td>
+                                <td th:text="${email}">user@example.com</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">Date :</td>
+                                <td th:text="${date}">01/01/2025 10:00</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">Code de vérification :</td>
+                                <td>
+                                    <span style="font-size:20px; font-weight:bold; color:#dc2626; letter-spacing:2px;"
+                                          th:text="${code}">123456</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <p style="margin-top:24px; color:#6b7280; font-size:13px;">
+                            Si cette demande ne provient pas de vous, vous pouvez ignorer cet e-mail —
+                            l'inscription ne sera pas validée sans ce code.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background:#f3f4f6; padding:16px; text-align:center; color:#6b7280; font-size:12px;">
+                        © GesPer — Gestion financière personnelle
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

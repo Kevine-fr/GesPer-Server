@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    show-sql: false
+
+logging:
+  level:
+    root: WARN
+    com.gesper: INFO
+
+server:
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-exception: false
