@@ -60,4 +60,5 @@ volumes:
 
 networks:
   web:
-    driver: bridge
+    external: true
+    name: web
