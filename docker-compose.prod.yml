@@ -1,5 +1,15 @@
 name: gesper
 
+# Plafonds de ressources (VPS mutualise 8 vCPU / 24 Go) : voir CAPACITY.md dans
+# le depot Infrastructure. La JVM de l'image utilise MaxRAMPercentage=75, elle
+# dimensionne donc son tas sur mem_limit (~1,1 Go ici) et non sur les 24 Go de
+# l'hote : sans ce plafond, le tas visait ~18 Go.
+x-logging: &logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   postgres:
     image: postgres:16-alpine
@@ -18,6 +28,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    mem_limit: 512m
+    cpus: 1
+    cpu_shares: 1024
+    logging: *logging
     networks:
       - web
 
@@ -52,6 +66,10 @@ services:
       OAUTH2_REDIRECT_URIS: ${OAUTH2_REDIRECT_URIS:-http://localhost:3000/oauth2/redirect,http://localhost:5173/oauth2/redirect}
     expose:
       - "${SERVER_PORT:-8080}"
+    mem_limit: 1536m
+    cpus: 2
+    cpu_shares: 1024
+    logging: *logging
     networks:
       - web
 
