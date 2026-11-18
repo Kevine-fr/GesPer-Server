@@ -45,9 +45,3 @@ gesper:
     from: test@gesper.local
     from-name: GesPer Test
     admin-recipient: admin@gesper.local
-
-management:
-  health:
-    # Pas de serveur SMTP en test : sans cela /actuator/health répond 503.
-    mail:
-      enabled: false

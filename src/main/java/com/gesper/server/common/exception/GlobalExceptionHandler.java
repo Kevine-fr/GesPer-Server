@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
@@ -84,8 +85,29 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(409, "Conflit de données — l'opération ne peut pas être effectuée.", req.getRequestURI()));
     }
 
+    /**
+     * Corps JSON illisible : erreur du client. Sans ce handler, il tombait dans
+     * le générique ci-dessous et comptait comme 500 dans les métriques.
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleUnreadable(HttpMessageNotReadableException ex, HttpServletRequest req) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.of(400, "Corps de requête invalide.", req.getRequestURI()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex, HttpServletRequest req) {
+        // Exceptions de Spring MVC qui portent déjà leur statut (405 méthode non
+        // permise, 404 ressource absente, 415, paramètre manquant…). Ce handler
+        // les transformait toutes en 500 : chaque requête mal formée gonflait le
+        // taux d'erreurs serveur vu par Grafana.
+        if (ex instanceof org.springframework.web.ErrorResponse spring) {
+            int code = spring.getStatusCode().value();
+            if (code < 500) {
+                String message = code == 404 ? "Ressource introuvable." : "Requête refusée.";
+                return ResponseEntity.status(code).body(ErrorResponse.of(code, message, req.getRequestURI()));
+            }
+        }
         log.error("Erreur non gérée", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.of(500, "Une erreur est survenue. Veuillez réessayer !", req.getRequestURI()));
