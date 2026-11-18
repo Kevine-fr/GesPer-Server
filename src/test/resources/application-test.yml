@@ -1,6 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:gesper_test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    # NON_KEYWORDS=VALUE : la colonne « value » (gains, spents) est un mot
+    # réservé de H2 ; sans cela, ces tables n'étaient jamais créées en test et
+    # aucune épreuve ne pouvait les toucher.
+    url: jdbc:h2:mem:gesper_test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -42,3 +45,9 @@ gesper:
     from: test@gesper.local
     from-name: GesPer Test
     admin-recipient: admin@gesper.local
+
+management:
+  health:
+    # Pas de serveur SMTP en test : sans cela /actuator/health répond 503.
+    mail:
+      enabled: false

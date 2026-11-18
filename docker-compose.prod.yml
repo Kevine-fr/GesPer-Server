@@ -46,11 +46,17 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
-      DB_URL: jdbc:postgresql://postgres:5432/${DB_NAME:-gesper}
+      # « production » par défaut : le profil dev journalise chaque requête SQL
+      # avec ses paramètres (TRACE), mots de passe hachés et jetons compris.
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-production}
+      # Nom de conteneur, unique sur la machine : sur le réseau partagé « web »,
+      # un nom de service court peut désigner la base d'une autre stack.
+      DB_URL: jdbc:postgresql://gesper-postgres:5432/${DB_NAME:-gesper}
       DB_USERNAME: ${DB_USERNAME:-gesper}
       DB_PASSWORD: ${DB_PASSWORD:-gesper}
-      JWT_SECRET: ${JWT_SECRET:-Y2hhbmdlLW1lLWluLXByb2R1Y3Rpb24tdGhpcy1pcy1hLXNlY3JldC1rZXktZm9yLWp3dC1hdC1sZWFzdC0yNTYtYml0cw==}
+      # Pas de valeur par défaut : celle d'avant était publique (dans ce dépôt),
+      # et quiconque la lisait pouvait signer ses propres jetons d'admin.
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET manquant}
       JWT_ACCESS_EXPIRATION: ${JWT_ACCESS_EXPIRATION:-900000}
       JWT_REFRESH_EXPIRATION: ${JWT_REFRESH_EXPIRATION:-604800000}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
