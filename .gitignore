@@ -43,3 +43,6 @@ Thumbs.db
 # Couverture / qualité
 .coverage/
 *.exec
+
+# Sauvegardes locales (scripts/backup.sh)
+backups/

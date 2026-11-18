@@ -57,7 +57,7 @@ jobs:
           SPRING_PROFILES_ACTIVE=production
           SERVER_PORT=8080
 
-          DB_URL=jdbc:postgresql://postgres:5432/${{ secrets.DB_NAME }}
+          DB_URL=jdbc:postgresql://gesper-postgres:5432/${{ secrets.DB_NAME }}
           DB_NAME=${{ secrets.DB_NAME }}
           DB_USERNAME=${{ secrets.DB_USERNAME }}
           DB_PASSWORD=${{ secrets.DB_PASSWORD }}

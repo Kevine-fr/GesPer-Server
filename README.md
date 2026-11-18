@@ -303,3 +303,12 @@ openssl rand -base64 64
 ## Licence
 
 MIT
+
+---
+
+## Tests, métriques et sauvegardes
+
+- Tests : `mvn -B test` (H2 en mémoire, profil `test`) et `bash tests/sauvegarde.test.sh` ; la CI (`tests.yml`) les relance sur chaque PR.
+- **Métriques Prometheus** : `/api/v1/actuator/prometheus` (HTTP, JVM, HikariCP) ; santé `/api/v1/actuator/health`.
+- **Sauvegarde** : `./scripts/backup.sh` (pg_dump) ; `./scripts/restore.sh <fichier>`. Les envois automatiques vers MinIO sont faits par le dépôt Infrastructure.
+- Conventions de travail : `CLAUDE.md`.
