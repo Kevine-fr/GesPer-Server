@@ -79,6 +79,31 @@ services:
     networks:
       - web
 
+  # Exporteur de la base, dans la stack de l'appli : il lit les identifiants
+  # du même .env que l'API. Celui du dépôt Infrastructure dépendait d'un DSN en
+  # secret GitHub, vide ou faux : Grafana montrait la base « injoignable » en
+  # continu alors qu'elle servait l'API.
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:latest
+    container_name: gesper-postgres-exporter
+    restart: unless-stopped
+    environment:
+      # Formes séparées plutôt qu'un DSN : un mot de passe contenant @ / : ou ?
+      # casserait une URL, pas ces variables.
+      DATA_SOURCE_URI: gesper-postgres:5432/${DB_NAME:-gesper}?sslmode=disable
+      DATA_SOURCE_USER: ${DB_USERNAME:-gesper}
+      DATA_SOURCE_PASS: ${DB_PASSWORD:-gesper}
+    expose:
+      - "9187"
+    depends_on:
+      - postgres
+    mem_limit: 96m
+    cpus: 0.2
+    cpu_shares: 256
+    logging: *logging
+    networks:
+      - web
+
 volumes:
   gesper-pg-data:
 

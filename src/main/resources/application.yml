@@ -116,6 +116,12 @@ springdoc:
     operations-sorter: method
 
 management:
+  health:
+    # La sonde du VPS lit /actuator/health : un SMTP injoignable la passait en
+    # DOWN (503) et GesPer apparaissait « en panne » alors que l'API servait.
+    # L'envoi de mail échoue déjà bruyamment dans les journaux quand il casse.
+    mail:
+      enabled: false
   endpoints:
     web:
       base-path: /actuator

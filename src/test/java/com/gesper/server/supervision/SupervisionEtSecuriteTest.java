@@ -32,9 +32,34 @@ class SupervisionEtSecuriteTest {
     @Autowired
     private JwtService jwtService;
 
+    /**
+     * Le test n'a pas de serveur SMTP (localhost:3025), comme une production
+     * dont le SMTP est injoignable : la santé doit rester UP. Le 18/11, la sonde
+     * voyait 503 en continu et GesPer apparaissait « en panne » alors que l'API
+     * répondait.
+     */
     @Test
-    void sante_publique() throws Exception {
+    void sante_publique_meme_sans_smtp() throws Exception {
         mvc.perform(get("/actuator/health")).andExpect(status().isOk());
+    }
+
+    /** Une route inconnue reste une erreur du client (401 sans jeton), jamais un 5xx. */
+    @Test
+    void route_inconnue_jamais_5xx() throws Exception {
+        mvc.perform(get("/route-qui-n-existe-pas")).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void methode_non_permise_405_et_non_500() throws Exception {
+        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON).content("{}"))
+                .andExpect(status().isMethodNotAllowed());
+    }
+
+    @Test
+    void corps_illisible_400_et_non_500() throws Exception {
+        mvc.perform(post("/auth/login").contentType(MediaType.APPLICATION_JSON).content("{pas du json"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
