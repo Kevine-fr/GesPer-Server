@@ -1,0 +1,16 @@
+# Fiche lue par le portfolio (Portfolio-Server, synchronisation GitHub).
+# Elle prime sur le README : titre, résumé et technologies affichés.
+title: GesPer
+subtitle: API de gestion des dépenses et des gains
+description: 'API REST de suivi financier personnel : dépenses, gains et catégories, avec authentification
+  JWT et Google, montants en BigDecimal et migrations Flyway.'
+techStack:
+- Java
+- Spring Boot
+- PostgreSQL
+- Flyway
+- JWT
+- OAuth2
+- Docker
+status: published
+year: 2025

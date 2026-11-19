@@ -1,5 +1,7 @@
 # GesPer Server — API REST de gestion financière
 
+API REST de suivi financier personnel : dépenses, gains et catégories, avec authentification JWT et Google, montants en BigDecimal et migrations Flyway.
+
 > Réécriture en **Java 21 + Spring Boot 3** du backend Laravel d'origine,
 > avec JWT, OAuth2 Google, BigDecimal monétaire, validation stricte
 > et architecture en couches prête pour la production.
